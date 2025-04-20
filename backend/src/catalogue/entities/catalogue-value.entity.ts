@@ -8,27 +8,27 @@ import {
 } from 'typeorm';
 import { CatalogueTypeEntity } from './catalogue-type.entity';
 
-@Entity()
+@Entity({ name: 'catalogue_value' })
 export class CatalogueValueEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'name' })
   name: string;
 
-  @Column()
+  @Column({ name: 'code' })
   code: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'description' })
   description: string;
 
-  @Column({ default: '1' })
+  @Column({ default: '1', name: 'status' })
   status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_date' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_date' })
   updatedDate: Date;
 
   @ManyToOne(() => CatalogueTypeEntity, (type) => type.values)

@@ -1,3 +1,4 @@
+import { decimal } from '../../common';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,23 +7,28 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'expense' })
 export class ExpenseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'description' })
   description: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', {
+    precision: 10,
+    scale: 2,
+    name: 'amount',
+    transformer: decimal,
+  })
   amount: number;
 
-  @Column({ default: '1' })
+  @Column({ default: '1', name: 'status' })
   status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_date' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_date' })
   updatedDate: Date;
 }

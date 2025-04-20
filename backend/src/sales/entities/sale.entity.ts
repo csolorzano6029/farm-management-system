@@ -5,33 +5,41 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { decimal } from '../../common';
 
-@Entity()
+@Entity({ name: 'sale' })
 export class SaleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'product_name' })
   product: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', {
+    precision: 10,
+    scale: 2,
+    name: 'quantity',
+    transformer: [decimal],
+  })
   quantity: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  pricePerUnit: number;
+  @Column('decimal', {
+    precision: 10,
+    scale: 2,
+    name: 'unit_price',
+    transformer: [decimal],
+  })
+  unitPrice: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  totalPrice: number;
-
-  @Column('date')
+  @Column('date', { name: 'sale_date' })
   saleDate: string;
 
-  @Column({ default: '1' })
+  @Column({ default: '1', name: 'status' })
   status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_date' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_date' })
   updatedDate: Date;
 }

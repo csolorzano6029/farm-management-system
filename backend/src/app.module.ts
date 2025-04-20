@@ -8,6 +8,7 @@ import { CommonModule } from './common/common.module';
 import { ExpenseModule } from './expense/expense.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     WorkLogModule,
     CommonModule,
     ExpenseModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

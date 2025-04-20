@@ -5,32 +5,34 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-import { WorkerEntity } from '../../worker/entities/worker.entity';
+import type { WorkerEntity } from '../../worker';
 
-@Entity()
+@Entity({ name: 'work_log' })
 export class WorkLogEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => WorkerEntity, { nullable: false })
-  worker: WorkerEntity;
+  @Column({ name: 'worker_id' })
+  workerId: number;
 
-  @Column('date')
-  workDate: string;
+  @Column({ name: 'hours_worked' })
+  hoursWorked: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  dailyWage: number;
-
-  @Column({ default: false })
+  @Column({ default: false, name: 'is_paid' })
   isPaid: boolean;
 
-  @Column({ default: '1' })
+  @Column({ default: '1', name: 'status' })
   status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_date' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_date' })
   updatedDate: Date;
+
+  @ManyToOne('WorkerEntity', (worker: WorkerEntity) => worker.worklogs)
+  @JoinColumn({ name: 'id' })
+  worker: WorkerEntity;
 }
