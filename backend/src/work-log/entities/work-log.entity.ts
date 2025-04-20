@@ -8,6 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import type { WorkerEntity } from '../../worker';
+import { date, decimal } from '../../common';
 
 @Entity({ name: 'work_log' })
 export class WorkLogEntity {
@@ -17,8 +18,14 @@ export class WorkLogEntity {
   @Column({ name: 'worker_id' })
   workerId: number;
 
-  @Column({ name: 'hours_worked' })
-  hoursWorked: number;
+  @Column({ name: 'work_date', transformer: date })
+  workDate: Date;
+
+  @Column({ name: 'journal_units', transformer: decimal })
+  journalUnits: number;
+
+  @Column({ default: false, name: 'is_additional' })
+  isAdditional: boolean;
 
   @Column({ default: false, name: 'is_paid' })
   isPaid: boolean;
@@ -33,6 +40,6 @@ export class WorkLogEntity {
   updatedDate: Date;
 
   @ManyToOne('WorkerEntity', (worker: WorkerEntity) => worker.worklogs)
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'worker_id' })
   worker: WorkerEntity;
 }

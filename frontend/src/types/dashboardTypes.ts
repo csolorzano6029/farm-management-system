@@ -31,3 +31,26 @@ export interface DashboardData {
     expenses: ExpenseSummary[];
   };
 }
+
+export interface WeeklyWorklog {
+  id: number;
+  workerId: number;
+  workDate: string; // o Date, si lo parseas
+  journalUnits: number;
+  isAdditional: boolean;
+  isPaid: boolean;
+  status: string;
+  createdDate: string;
+  updatedDate: string;
+}
+
+export interface WeeklyWorkerSummary {
+  id: number;
+  name: string;
+  dailyWage: number;
+  status: string;
+  createdDate: string;
+  updatedDate: string;
+  worklogs: WeeklyWorklog[];
+  total: number; // total a pagar
+}

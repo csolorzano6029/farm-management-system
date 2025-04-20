@@ -9,4 +9,9 @@ export class DashboardController {
   async getDashboardData() {
     return this.dashboardService.getDashboardData();
   }
+
+  @Get('weekly-summary')
+  async getWeeklySummary() {
+    return this.dashboardService.getWeeklySummary();
+  }
 }

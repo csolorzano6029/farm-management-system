@@ -19,6 +19,11 @@ export class WorkerController {
     return this.workerService.findAll();
   }
 
+  @Get('worklogs')
+  findWorkersWithWorkLogsInRange(): Promise<WorkerEntity[]> {
+    return this.workerService.findWorkersWithWorkLogsInRange();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number): Promise<WorkerEntity> {
     return this.workerService.findOne(id);

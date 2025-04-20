@@ -17,6 +17,8 @@ export class WorkerEntity {
   @Column()
   name: string;
 
+  total?: number;
+
   @Column('decimal', {
     precision: 10,
     scale: 2,

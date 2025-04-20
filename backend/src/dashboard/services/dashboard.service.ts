@@ -61,4 +61,14 @@ export class DashboardService {
       expenseSummary,
     };
   }
+
+  async getWeeklySummary() {
+    const workers = await this.workerService.findWorkersWithWorkLogsInRange();
+    workers.forEach((worker) => {
+      worker.total =
+        worker.dailyWage *
+        worker.worklogs?.reduce((sum, log) => sum + log.journalUnits, 0);
+    });
+    return workers;
+  }
 }

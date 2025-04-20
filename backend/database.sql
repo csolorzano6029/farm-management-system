@@ -37,7 +37,12 @@ CREATE TABLE work_log (
     id SERIAL PRIMARY KEY,
     worker_id INT REFERENCES worker(id),
     work_date DATE NOT NULL,
-    hours_worked DECIMAL(5, 2) NOT NULL,
+    -- Reemplazamos hours_worked por journal_units
+    -- 1.0 = un jornal completo
+    -- 0.5 = medio jornal (por ejemplo, adicional en la tarde)
+    journal_units DECIMAL(3, 2) NOT NULL DEFAULT 1.0,
+    -- Si es un trabajo adicional en la tarde
+    is_additional BOOLEAN DEFAULT FALSE,
     is_paid BOOLEAN DEFAULT FALSE,
     status VARCHAR(1) DEFAULT '1',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -1,13 +1,22 @@
 import axios from "axios";
+import { API_URL } from "../constants";
 
-const API_URL = "http://localhost:3000/dashboard";
-
-export const getDashboardData = async () => {
+/* export const getDashboardData = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(API_URL + "/dashboard");
     return response.data;
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
+    throw error;
+  }
+}; */
+
+export const getDashboardWeeklySummary = async () => {
+  try {
+    const response = await axios.get(API_URL + "/dashboard/weekly-summary");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching dashboard weekly summary:", error);
     throw error;
   }
 };

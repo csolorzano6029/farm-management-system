@@ -43,4 +43,41 @@ export class WorkerService {
 
     await this.workerRepository.delete(id);
   }
+
+  private async getWorkersWithWorkLogsInRange(
+    startOfWeek: string,
+    endOfWeek: string,
+  ): Promise<WorkerEntity[]> {
+    return this.workerRepository
+      .createQueryBuilder('worker')
+      .leftJoinAndSelect('worker.worklogs', 'worklog')
+      .where('worker.status = :status', { status: '1' })
+      .andWhere('worklog.workDate BETWEEN :startOfWeek AND :endOfWeek', {
+        startOfWeek,
+        endOfWeek,
+      })
+      .getMany();
+  }
+
+  async findWorkersWithWorkLogsInRange(): Promise<WorkerEntity[]> {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+    // Calcular el lunes (inicio de semana)
+    const startOfWeek = new Date(today);
+    const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    startOfWeek.setDate(today.getDate() - daysSinceMonday);
+
+    // Calcular el domingo (fin de semana)
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const startOfWeekString = startOfWeek.toISOString().split('T')[0];
+    const endOfWeekString = endOfWeek.toISOString().split('T')[0];
+
+    return this.getWorkersWithWorkLogsInRange(
+      startOfWeekString,
+      endOfWeekString,
+    );
+  }
 }
