@@ -26,6 +26,8 @@ CREATE TABLE catalogue_value (
 CREATE TABLE worker (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(10) NULL,
+    identification_number VARCHAR(10) NULL,
     daily_wage DECIMAL(10, 2) NOT NULL,
     status VARCHAR(1) DEFAULT '1',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

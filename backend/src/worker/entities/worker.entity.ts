@@ -17,6 +17,12 @@ export class WorkerEntity {
   @Column()
   name: string;
 
+  @Column({ name: 'identification_number' })
+  identificationNumber: string;
+
+  @Column({ name: 'phone_number' })
+  phoneNumber: string;
+
   total?: number;
 
   @Column('decimal', {
