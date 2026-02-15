@@ -37,25 +37,42 @@ export class TransactionsService {
     });
   }
 
+  async findAllPaged(page: number, limit: number) {
+    const [data, total] = await this.transactionRepository.findAndCount({
+      relations: ['category', 'worker'],
+      order: { date: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+    };
+  }
+
   async getDashboardStats() {
-    const incomeResult = await this.transactionRepository
+    const incomeResult = (await this.transactionRepository
       .createQueryBuilder('transaction')
       .select('SUM(transaction.totalAmount)', 'total')
       .where('transaction.type = :type', { type: 'INCOME' })
-      .getRawOne();
+      .getRawOne()) as { total: string };
 
-    const expenseResult = await this.transactionRepository
+    const expenseResult = (await this.transactionRepository
       .createQueryBuilder('transaction')
       .select('SUM(transaction.totalAmount)', 'total')
       .where('transaction.type = :type', { type: 'EXPENSE' })
-      .getRawOne();
+      .getRawOne()) as { total: string };
 
-    const income = parseFloat(incomeResult.total) || 0;
-    const expense = parseFloat(expenseResult.total) || 0;
+    const income = Number.parseFloat(incomeResult.total) || 0;
+    const expense = Number.parseFloat(expenseResult.total) || 0;
 
     const recentTransactions = await this.transactionRepository.find({
       order: { date: 'DESC' },
       take: 5,
+      relations: ['category'],
     });
 
     return {

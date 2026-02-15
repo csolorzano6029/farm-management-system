@@ -33,3 +33,10 @@ export interface DashboardStats {
   balance: number;
   recentTransactions: Transaction[];
 }
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}

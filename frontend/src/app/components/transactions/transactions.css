@@ -164,7 +164,9 @@
   color: #991b1b;
 }
 
-.loading-state, .error-state, .no-data {
+.loading-state,
+.error-state,
+.no-data {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -185,12 +187,42 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .no-data .material-symbols-rounded {
   font-size: 48px;
   color: #d1d5db;
   margin-bottom: 16px;
+}
+
+/* Custom Paginator Overrides */
+::ng-deep .custom-paginator {
+  /* Override PrimeNG variables locally for this component */
+  --p-paginator-background: transparent;
+  --p-paginator-border-width: 0;
+  --p-paginator-color: #374151;
+  --p-paginator-padding: 1rem;
+  
+  /* Ensure primary color matches the app (Emerald-500) */
+  --p-primary-color: #10b981;
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: #059669;
+}
+
+::ng-deep .custom-paginator .p-paginator {
+  background: transparent;
+  justify-content: flex-end; /* Align to right like typical data tables */
+  border-top: 1px solid #e5e7eb;
+}
+
+::ng-deep .custom-paginator .p-paginator-current {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-right: auto; /* Push text to the left */
 }

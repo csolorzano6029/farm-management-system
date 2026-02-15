@@ -156,7 +156,7 @@
     <div class="recent-section">
       <div class="card-header">
         <h3>Transacciones Recientes</h3>
-        <button class="view-all-btn">Ver todas</button>
+        <button class="view-all-btn" routerLink="/transacciones">Ver todas</button>
       </div>
 
       @if (stats.recentTransactions.length > 0) {
@@ -165,18 +165,19 @@
             <tr>
               <th>Fecha</th>
               <th>Tipo</th>
+              <th>Categoria</th>
               <th>Monto</th>
               <th>Notas</th>
               <th>Estado</th>
             </tr>
           </thead>
           <tbody>
-            @for (t of stats.recentTransactions; track t.id) {
+            @for (t of stats.recentTransactions.slice(0, 5); track t.id) {
               <tr>
                 <td>
                   <div class="date-cell">
                     <span class="material-symbols-rounded icon">calendar_today</span>
-                    {{ t.date | date: 'dd MMM yyyy' }}
+                    {{ t.date | date: 'dd/MM/yyyy HH:mm:ss' }}
                   </div>
                 </td>
                 <td>
@@ -188,8 +189,9 @@
                     {{ t.type === 'INCOME' ? 'Ingreso' : 'Gasto' }}
                   </span>
                 </td>
-                <td class="amount-cell">{{ t.totalAmount | currency }}</td>
+                <td class="notes-cell">{{ t.category.name }}</td>
                 <td class="notes-cell">{{ t.notes || '-' }}</td>
+                <td class="amount-cell">{{ t.totalAmount | currency }}</td>
                 <td><span class="status-dot completed"></span> Completado</td>
               </tr>
             }

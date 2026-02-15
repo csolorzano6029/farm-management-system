@@ -47,7 +47,7 @@
                 <td>
                   <div class="date-cell">
                     <span class="material-symbols-rounded icon">calendar_today</span>
-                    {{ t.date | date: 'dd MMM yyyy' }}
+                    {{ t.date | date: 'dd/MM/yyyy HH:mm:ss' }}
                   </div>
                 </td>
                 <td>
@@ -79,6 +79,18 @@
             }
           </tbody>
         </table>
+
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]="(page() - 1) * limit()"
+          [rows]="limit()"
+          [totalRecords]="total()"
+          [rowsPerPageOptions]="[5, 10, 25, 100]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {last} de {totalRecords}"
+          styleClass="custom-paginator"
+        >
+        </p-paginator>
       } @else {
         <div class="no-data">
           <span class="material-symbols-rounded">receipt_long</span>
