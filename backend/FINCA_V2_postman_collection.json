@@ -1,0 +1,292 @@
+{
+  "info": {
+    "name": "FINCA_V2 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "App",
+      "item": [
+        {
+          "name": "Health Check / Hello",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Catalogue",
+      "item": [
+        {
+          "name": "Create Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"CAT_CODE\",\n  \"name\": \"Catalogue Name\",\n  \"description\": \"Description of the catalogue type\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/catalogue/types",
+              "host": ["{{base_url}}"],
+              "path": ["catalogue", "types"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/catalogue/types",
+              "host": ["{{base_url}}"],
+              "path": ["catalogue", "types"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Value",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"catalogueTypeId\": \"uuid-of-type\",\n  \"code\": \"VAL_CODE\",\n  \"name\": \"Value Name\",\n  \"numericValue\": 10,\n  \"description\": \"Description of the value\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/catalogue/values",
+              "host": ["{{base_url}}"],
+              "path": ["catalogue", "values"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Values",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/catalogue/values",
+              "host": ["{{base_url}}"],
+              "path": ["catalogue", "values"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Values By Type Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/catalogue/values/type/:code",
+              "host": ["{{base_url}}"],
+              "path": ["catalogue", "values", "type", ":code"],
+              "variable": [
+                {
+                  "key": "code",
+                  "value": "CAT_CODE",
+                  "description": "Code of the catalogue type"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2024-02-14T12:00:00Z\",\n  \"type\": \"INCOME\",\n  \"categoryId\": \"uuid-of-category\",\n  \"workerId\": \"uuid-of-worker\",\n  \"quantity\": 1,\n  \"unitPrice\": 100,\n  \"totalAmount\": 100,\n  \"notes\": \"Transaction note\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": ["{{base_url}}"],
+              "path": ["transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": ["{{base_url}}"],
+              "path": ["transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/stats",
+              "host": ["{{base_url}}"],
+              "path": ["transactions", "stats"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "item": [
+        {
+          "name": "Create Worker",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/workers",
+              "host": ["{{base_url}}"],
+              "path": ["workers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Workers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/workers",
+              "host": ["{{base_url}}"],
+              "path": ["workers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Worker By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/workers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["workers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-of-worker"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Worker",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/workers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["workers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-of-worker"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Worker",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/workers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["workers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "uuid-of-worker"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

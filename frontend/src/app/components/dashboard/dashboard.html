@@ -1,0 +1,206 @@
+<div class="dashboard-container">
+  <div class="welcome-section">
+    <h1>Bienvenido de nuevo</h1>
+    <p class="subtitle">Resumen de actividad y métricas principales de la finca.</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando datos...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-state">
+      <span class="material-symbols-rounded">error</span>
+      <p>{{ error }}</p>
+      <button (click)="loadStats()">Reintentar</button>
+    </div>
+  }
+
+  @if (stats) {
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon income-bg">
+          <span class="material-symbols-rounded">trending_up</span>
+        </div>
+        <div class="stat-info">
+          <h3>Ingresos Totales</h3>
+          <p class="amount">{{ stats.income | currency }}</p>
+          <span class="trend positive">
+            <span class="material-symbols-rounded">arrow_upward</span>
+            +12.5% vs mes anterior
+          </span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon expense-bg">
+          <span class="material-symbols-rounded">trending_down</span>
+        </div>
+        <div class="stat-info">
+          <h3>Gastos Totales</h3>
+          <p class="amount">{{ stats.expense | currency }}</p>
+          <span class="trend negative">
+            <span class="material-symbols-rounded">arrow_downward</span>
+            +5.2% vs mes anterior
+          </span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon balance-bg">
+          <span class="material-symbols-rounded">account_balance_wallet</span>
+        </div>
+        <div class="stat-info">
+          <h3>Balance Neto</h3>
+          <p class="amount" [class.negative]="stats.balance < 0">
+            {{ stats.balance | currency }}
+          </p>
+          <span class="trend neutral">
+            <span class="material-symbols-rounded">remove</span>
+            Estable
+          </span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon workers-bg">
+          <span class="material-symbols-rounded">group</span>
+        </div>
+        <div class="stat-info">
+          <h3>Trabajadores Activos</h3>
+          <p class="amount">12</p>
+          <!-- Hardcoded for now until WorkerService is integrated -->
+          <span class="trend">
+            <span class="material-symbols-rounded">check_circle</span>
+            Ver listado
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section (Placeholders for now) -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="card-header">
+          <h3>Ingresos vs Gastos</h3>
+          <button class="icon-btn">
+            <span class="material-symbols-rounded">more_vert</span>
+          </button>
+        </div>
+        <div class="chart-placeholder">
+          <!-- Simple CSS Bar Chart Visualization -->
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar income" style="height: 60%"></div>
+              <div class="bar expense" style="height: 40%"></div>
+              <span class="label">Ene</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar income" style="height: 75%"></div>
+              <div class="bar expense" style="height: 30%"></div>
+              <span class="label">Feb</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar income" style="height: 50%"></div>
+              <div class="bar expense" style="height: 45%"></div>
+              <span class="label">Mar</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar income" style="height: 90%"></div>
+              <div class="bar expense" style="height: 60%"></div>
+              <span class="label">Abr</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar income" style="height: 65%"></div>
+              <div class="bar expense" style="height: 35%"></div>
+              <span class="label">May</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="card-header">
+          <h3>Producción de Cultivos</h3>
+          <button class="icon-btn">
+            <span class="material-symbols-rounded">more_vert</span>
+          </button>
+        </div>
+        <div class="chart-placeholder">
+          <div class="line-chart-mock">
+            <svg viewBox="0 0 300 100" class="chart-svg">
+              <polyline
+                fill="none"
+                stroke="#10b981"
+                stroke-width="3"
+                points="0,80 50,60 100,70 150,40 200,50 250,20 300,30"
+              />
+              <circle cx="0" cy="80" r="4" fill="#10b981" />
+              <circle cx="50" cy="60" r="4" fill="#10b981" />
+              <circle cx="100" cy="70" r="4" fill="#10b981" />
+              <circle cx="150" cy="40" r="4" fill="#10b981" />
+              <circle cx="200" cy="50" r="4" fill="#10b981" />
+              <circle cx="250" cy="20" r="4" fill="#10b981" />
+              <circle cx="300" cy="30" r="4" fill="#10b981" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="recent-section">
+      <div class="card-header">
+        <h3>Transacciones Recientes</h3>
+        <button class="view-all-btn">Ver todas</button>
+      </div>
+
+      @if (stats.recentTransactions.length > 0) {
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Monto</th>
+              <th>Notas</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (t of stats.recentTransactions; track t.id) {
+              <tr>
+                <td>
+                  <div class="date-cell">
+                    <span class="material-symbols-rounded icon">calendar_today</span>
+                    {{ t.date | date: 'dd MMM yyyy' }}
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.badge-income]="t.type === 'INCOME'"
+                    [class.badge-expense]="t.type === 'EXPENSE'"
+                  >
+                    {{ t.type === 'INCOME' ? 'Ingreso' : 'Gasto' }}
+                  </span>
+                </td>
+                <td class="amount-cell">{{ t.totalAmount | currency }}</td>
+                <td class="notes-cell">{{ t.notes || '-' }}</td>
+                <td><span class="status-dot completed"></span> Completado</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="no-data">
+          <span class="material-symbols-rounded">inbox</span>
+          <p>No se encontraron movimientos recientes.</p>
+        </div>
+      }
+    </div>
+  }
+</div>

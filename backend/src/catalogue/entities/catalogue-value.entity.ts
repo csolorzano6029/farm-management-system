@@ -3,34 +3,42 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CatalogueTypeEntity } from './catalogue-type.entity';
+import { CatalogueType } from './catalogue-type.entity';
 
-@Entity({ name: 'catalogue_value' })
-export class CatalogueValueEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+@Entity('catalogue_value')
+export class CatalogueValue {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({ name: 'name' })
-  name: string;
+  @Column({ name: 'catalogue_type_id' })
+  catalogueTypeId: string;
 
-  @Column({ name: 'code' })
+  @ManyToOne(() => CatalogueType, (type) => type.values)
+  @JoinColumn({ name: 'catalogue_type_id' })
+  type: CatalogueType;
+
+  @Column()
   code: string;
 
-  @Column({ nullable: true, name: 'description' })
+  @Column()
+  name: string;
+
+  @Column('decimal', { name: 'numeric_value', nullable: true })
+  numericValue: number;
+
+  @Column({ nullable: true })
   description: string;
 
-  @Column({ default: '1', name: 'status' })
-  status: string;
+  @Column({ default: true })
+  active: boolean;
 
-  @CreateDateColumn({ name: 'created_date' })
-  createdDate: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_date' })
-  updatedDate: Date;
-
-  @ManyToOne(() => CatalogueTypeEntity, (type) => type.values)
-  catalogueType: CatalogueTypeEntity;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

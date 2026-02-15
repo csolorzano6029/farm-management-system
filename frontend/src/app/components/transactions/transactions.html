@@ -1,0 +1,91 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Transacciones</h1>
+      <p class="subtitle">Gestiona los ingresos y gastos de la finca</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary">
+        <span class="material-symbols-rounded">add</span>
+        Nueva Transacción
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando transacciones...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="error-state">
+      <span class="material-symbols-rounded">error</span>
+      <p>{{ error() }}</p>
+      <button (click)="loadTransactions()" class="btn btn-outline">Reintentar</button>
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    <div class="content-card">
+      @if (transactions().length > 0) {
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Categoría</th>
+              <th>Concepto/Notas</th>
+              <th>Monto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (t of transactions(); track t.id) {
+              <tr>
+                <td>
+                  <div class="date-cell">
+                    <span class="material-symbols-rounded icon">calendar_today</span>
+                    {{ t.date | date: 'dd MMM yyyy' }}
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.badge-income]="t.type === 'INCOME'"
+                    [class.badge-expense]="t.type === 'EXPENSE'"
+                  >
+                    {{ t.type === 'INCOME' ? 'Ingreso' : 'Gasto' }}
+                  </span>
+                </td>
+                <td>
+                  <!-- Category name placeholder until relation is populated/mapped -->
+                  {{ t.category.name || 'General' }}
+                </td>
+                <td class="notes-cell" title="{{ t.notes }}">
+                  {{ t.notes || '-' }}
+                </td>
+                <td class="amount-cell">{{ t.totalAmount | currency }}</td>
+                <td class="actions-cell">
+                  <button class="icon-btn" title="Editar">
+                    <span class="material-symbols-rounded">edit</span>
+                  </button>
+                  <button class="icon-btn delete" title="Eliminar">
+                    <span class="material-symbols-rounded">delete</span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <div class="no-data">
+          <span class="material-symbols-rounded">receipt_long</span>
+          <p>No hay transacciones registradas.</p>
+          <button class="btn btn-primary">Crear primera transacción</button>
+        </div>
+      }
+    </div>
+  }
+</div>

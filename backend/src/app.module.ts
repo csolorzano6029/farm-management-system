@@ -1,38 +1,35 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatalogueModule } from './catalogue/catalogue.module';
-import { WorkerModule } from './worker/worker.module';
-import { WorkLogModule } from './work-log/work-log.module';
-import { CommonModule } from './common/common.module';
-import { ExpenseModule } from './expense/expense.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DashboardModule } from './dashboard/dashboard.module';
+import { WorkersModule } from './workers/workers.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        synchronize: false,
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        host: configService.get<string>('DATABASE_HOST', 'localhost'),
+        port: configService.get<number>('DATABASE_PORT', 5432),
+        username: configService.get<string>('DATABASE_USERNAME', 'postgres'),
+        password: configService.get<string>('DATABASE_PASSWORD', 'postgres'),
+        database: configService.get<string>('DATABASE_DATABASE', 'finca_db'),
+        autoLoadEntities: true,
+        synchronize: true, // set to false in production
       }),
+      inject: [ConfigService],
     }),
     CatalogueModule,
-    WorkerModule,
-    WorkLogModule,
-    CommonModule,
-    ExpenseModule,
-    DashboardModule,
+    WorkersModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

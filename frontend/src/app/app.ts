@@ -1,0 +1,22 @@
+import { Component, signal } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  templateUrl: './app.html',
+  styleUrl: './app.css',
+})
+export class App {
+  protected readonly title = signal('frontend');
+  protected isSidebarCollapsed = signal(false);
+
+  toggleSidebar() {
+    this.isSidebarCollapsed.update((v) => !v);
+  }
+
+  getPageTitle(): string {
+    // Simple logic for now, can be expanded with Router events later
+    return 'Panel de Control';
+  }
+}

@@ -2,35 +2,32 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
-import { CatalogueValueEntity } from './catalogue-value.entity';
+import { CatalogueValue } from './catalogue-value.entity';
 
-@Entity({ name: 'catalogue_type' })
-export class CatalogueTypeEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+@Entity('catalogue_type')
+export class CatalogueType {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({ name: 'name' })
-  name: string;
-
-  @Column({ name: 'code' })
+  @Column({ unique: true })
   code: string;
 
-  @Column({ nullable: true, name: 'description' })
+  @Column()
+  name: string;
+
+  @Column({ nullable: true })
   description: string;
 
-  @Column({ default: '1', name: 'status' })
-  status: string;
+  @OneToMany(() => CatalogueValue, (value) => value.type)
+  values: CatalogueValue[];
 
-  @CreateDateColumn({ name: 'created_date' })
-  createdDate: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_date' })
-  updatedDate: Date;
-
-  @OneToMany(() => CatalogueValueEntity, (value) => value.catalogueType)
-  values: CatalogueValueEntity[];
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

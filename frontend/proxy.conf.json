@@ -1,0 +1,17 @@
+{
+  "/catalogue": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/transactions": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/workers": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

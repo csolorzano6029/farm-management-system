@@ -1,18 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CatalogueTypeEntity, CatalogueValueEntity } from './entities';
-import { CatalogueTypeService, CatalogueValueService } from './services';
-import {
-  CatalogueTypeController,
-  CatalogueValueController,
-} from './controllers';
+import { CatalogueService } from './catalogue.service';
+import { CatalogueController } from './catalogue.controller';
+import { CatalogueType } from './entities/catalogue-type.entity';
+import { CatalogueValue } from './entities/catalogue-value.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([CatalogueTypeEntity, CatalogueValueEntity]),
-  ],
-  controllers: [CatalogueTypeController, CatalogueValueController],
-  providers: [CatalogueTypeService, CatalogueValueService],
-  exports: [CatalogueTypeService, CatalogueValueService],
+  imports: [TypeOrmModule.forFeature([CatalogueType, CatalogueValue])],
+  controllers: [CatalogueController],
+  providers: [CatalogueService],
+  exports: [CatalogueService],
 })
 export class CatalogueModule {}
