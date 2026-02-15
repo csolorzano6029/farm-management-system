@@ -31,6 +31,16 @@ export class CatalogueService {
     return this.http.get<CatalogueValue[]>(`${this.baseUrl}/values/type/${code}`);
   }
 
+  findValuesByTypePaginated(
+    code: string,
+    page: number,
+    limit: number,
+  ): Observable<{ data: CatalogueValue[]; total: number }> {
+    return this.http.get<{ data: CatalogueValue[]; total: number }>(
+      `${this.baseUrl}/values/type/${code}/paginated?page=${page}&limit=${limit}`,
+    );
+  }
+
   updateValue(id: string, data: Partial<CatalogueValue>): Observable<CatalogueValue> {
     return this.http.post<CatalogueValue>(`${this.baseUrl}/values/${id}`, data);
   }

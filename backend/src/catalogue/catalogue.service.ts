@@ -51,6 +51,25 @@ export class CatalogueService {
     });
   }
 
+  async findValuesByTypePaginated(code: string, page: number, limit: number) {
+    const type = await this.typeRepository.findOne({
+      where: { code, active: true },
+    });
+
+    if (!type) {
+      return { data: [], total: 0 };
+    }
+
+    const [data, total] = await this.valueRepository.findAndCount({
+      where: { type: { id: type.id }, active: true },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { name: 'ASC' },
+    });
+
+    return { data, total };
+  }
+
   async updateValue(id: string, updateDto: any) {
     await this.valueRepository.update(id, updateDto);
     return this.valueRepository.findOne({ where: { id } });

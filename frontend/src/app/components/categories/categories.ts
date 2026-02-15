@@ -9,6 +9,9 @@ import { DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-categories',
@@ -21,16 +24,25 @@ import { TextareaModule } from 'primeng/textarea';
     RippleModule,
     InputTextModule,
     TextareaModule,
+    ConfirmDialogModule,
+    PaginatorModule,
   ],
+  providers: [ConfirmationService],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
 export class Categories implements OnInit {
   private readonly catalogueService = inject(CatalogueService);
+  private readonly confirmationService = inject(ConfirmationService);
 
   types = signal<CatalogueType[]>([]);
   selectedType = signal<CatalogueType | null>(null);
   values = signal<CatalogueValue[]>([]);
+
+  // Pagination State
+  page = signal(1);
+  limit = signal(10);
+  total = signal(0);
 
   loadingTypes = signal(true);
   loadingValues = signal(false);
@@ -73,17 +85,26 @@ export class Categories implements OnInit {
 
   loadValues(code: string) {
     this.loadingValues.set(true);
-    this.catalogueService.findValuesByType(code).subscribe({
-      next: (data) => {
-        this.values.set(data);
+    this.catalogueService.findValuesByTypePaginated(code, this.page(), this.limit()).subscribe({
+      next: (response) => {
+        this.values.set(response.data);
+        this.total.set(response.total);
         this.loadingValues.set(false);
       },
       error: (err) => {
         console.error(err);
-        // Don't set global error, just maybe empty list or snackbar
         this.loadingValues.set(false);
       },
     });
+  }
+
+  onPageChange(event: any) {
+    this.page.set(event.page + 1); // PrimeNG is 0-indexed
+    this.limit.set(event.rows);
+    const type = this.selectedType();
+    if (type) {
+      this.loadValues(type.code);
+    }
   }
 
   openCreateModal() {
@@ -153,13 +174,24 @@ export class Categories implements OnInit {
   }
 
   deleteValue(value: CatalogueValue) {
-    if (!confirm(`¿Estás seguro de eliminar "${value.name}"?`)) return;
-
-    this.catalogueService.removeValue(value.id!).subscribe({
-      next: () => {
-        this.loadValues(this.selectedType()!.code);
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de eliminar "${value.name}"?`,
+      header: 'Confirmar Eliminación',
+      icon: 'pi pi-exclamation-circle',
+      acceptIcon: 'pi pi-check',
+      rejectIcon: 'pi pi-times',
+      acceptLabel: 'Sí, Eliminar',
+      rejectLabel: 'No, Cancelar',
+      acceptButtonStyleClass: 'p-button-success confirm-yes-btn',
+      rejectButtonStyleClass: 'p-button-danger confirm-no-btn',
+      accept: () => {
+        this.catalogueService.removeValue(value.id!).subscribe({
+          next: () => {
+            this.loadValues(this.selectedType()!.code);
+          },
+          error: (err) => alert('Error al eliminar'),
+        });
       },
-      error: (err) => alert('Error al eliminar'),
     });
   }
 }

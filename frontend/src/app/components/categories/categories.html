@@ -78,6 +78,16 @@
                 }
               </tbody>
             </table>
+
+            <p-paginator
+              [rows]="limit()"
+              [totalRecords]="total()"
+              [first]="(page() - 1) * limit()"
+              [rowsPerPageOptions]="[5, 10, 20, 50]"
+              (onPageChange)="onPageChange($event)"
+              styleClass="custom-paginator"
+              [dropdownAppendTo]="'self'"
+            ></p-paginator>
           } @else {
             <div class="no-data">
               <p>No hay elementos en este catálogo.</p>
@@ -164,3 +174,5 @@
     ></button>
   </ng-template>
 </p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }" styleClass="custom-confirm-dialog"></p-confirmDialog>

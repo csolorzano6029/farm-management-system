@@ -292,34 +292,6 @@
   justify-content: center;
 }
 
-:host ::ng-deep .confirm-yes-btn {
-  background-color: #10b981 !important;
-  border: 1px solid #10b981 !important;
-  color: #ffffff !important;
-  border-radius: 8px !important;
-  font-weight: 600;
-}
-
-:host ::ng-deep .confirm-yes-btn:hover {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-  color: #ffffff !important;
-}
-
-:host ::ng-deep .confirm-no-btn {
-  background-color: #ef4444 !important;
-  border: 1px solid #ef4444 !important;
-  color: #ffffff !important;
-  border-radius: 8px !important;
-  font-weight: 600;
-}
-
-:host ::ng-deep .confirm-no-btn:hover {
-  background-color: #dc2626 !important;
-  border-color: #dc2626 !important;
-  color: #ffffff !important;
-}
-
 /* Cleanup: Remove old modal styles */
 /* Modal styles removed as we now use PrimeNG p-dialog */
 

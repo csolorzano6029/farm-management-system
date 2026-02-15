@@ -92,34 +92,13 @@
           </button>
         </div>
         <div class="chart-placeholder">
-          <!-- Simple CSS Bar Chart Visualization -->
-          <div class="bar-chart">
-            <div class="bar-group">
-              <div class="bar income" style="height: 60%"></div>
-              <div class="bar expense" style="height: 40%"></div>
-              <span class="label">Ene</span>
-            </div>
-            <div class="bar-group">
-              <div class="bar income" style="height: 75%"></div>
-              <div class="bar expense" style="height: 30%"></div>
-              <span class="label">Feb</span>
-            </div>
-            <div class="bar-group">
-              <div class="bar income" style="height: 50%"></div>
-              <div class="bar expense" style="height: 45%"></div>
-              <span class="label">Mar</span>
-            </div>
-            <div class="bar-group">
-              <div class="bar income" style="height: 90%"></div>
-              <div class="bar expense" style="height: 60%"></div>
-              <span class="label">Abr</span>
-            </div>
-            <div class="bar-group">
-              <div class="bar income" style="height: 65%"></div>
-              <div class="bar expense" style="height: 35%"></div>
-              <span class="label">May</span>
-            </div>
-          </div>
+          <p-chart
+            type="bar"
+            [data]="incomeExpenseChartData"
+            [options]="incomeExpenseChartOptions"
+            width="100%"
+            height="100%"
+          ></p-chart>
         </div>
       </div>
 
@@ -131,23 +110,13 @@
           </button>
         </div>
         <div class="chart-placeholder">
-          <div class="line-chart-mock">
-            <svg viewBox="0 0 300 100" class="chart-svg">
-              <polyline
-                fill="none"
-                stroke="#10b981"
-                stroke-width="3"
-                points="0,80 50,60 100,70 150,40 200,50 250,20 300,30"
-              />
-              <circle cx="0" cy="80" r="4" fill="#10b981" />
-              <circle cx="50" cy="60" r="4" fill="#10b981" />
-              <circle cx="100" cy="70" r="4" fill="#10b981" />
-              <circle cx="150" cy="40" r="4" fill="#10b981" />
-              <circle cx="200" cy="50" r="4" fill="#10b981" />
-              <circle cx="250" cy="20" r="4" fill="#10b981" />
-              <circle cx="300" cy="30" r="4" fill="#10b981" />
-            </svg>
-          </div>
+          <p-chart
+            type="line"
+            [data]="cropProductionChartData"
+            [options]="cropProductionChartOptions"
+            width="100%"
+            height="100%"
+          ></p-chart>
         </div>
       </div>
     </div>

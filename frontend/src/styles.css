@@ -15,3 +15,84 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Custom Paginator Overrides (Global) */
+.custom-paginator {
+  /* Override PrimeNG variables locally for this component */
+  --p-paginator-background: transparent;
+  --p-paginator-border-width: 0;
+  --p-paginator-color: #374151;
+  --p-paginator-padding: 1rem;
+  
+  /* Ensure primary color matches the app (Emerald-500) */
+  --p-primary-color: #10b981;
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: #059669;
+}
+
+.custom-paginator .p-paginator {
+  background: transparent;
+  justify-content: flex-end; /* Align to right like typical data tables */
+  border-top: 1px solid #e5e7eb;
+}
+
+.custom-paginator .p-paginator-current {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-right: auto; /* Push text to the left */
+}
+.custom-paginator .p-paginator-page.p-paginator-page-selected,
+.custom-paginator .p-paginator-page-selected {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.custom-paginator .p-paginator-page:not(.p-paginator-page-selected):hover {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+/* Hover effect for navigation arrows (First, Prev, Next, Last) */
+.custom-paginator .p-paginator-first:not(.p-disabled):hover,
+.custom-paginator .p-paginator-prev:not(.p-disabled):hover,
+.custom-paginator .p-paginator-next:not(.p-disabled):hover,
+.custom-paginator .p-paginator-last:not(.p-disabled):hover {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+.p-select-list {
+  position: absolute;
+  bottom: 100%;
+  background: #ffffff;
+}
+
+
+.confirm-yes-btn {
+  background-color: #10b981 !important;
+  border: 1px solid #10b981 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+}
+
+.confirm-yes-btn:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.confirm-no-btn {
+  background-color: #ef4444 !important;
+  border: 1px solid #ef4444 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+}
+
+.confirm-no-btn:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}

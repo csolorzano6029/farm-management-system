@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  ParseIntPipe,
+  DefaultValuePipe,
+} from '@nestjs/common';
 import { CatalogueService } from './catalogue.service';
 import { CreateCatalogueTypeDto } from './dto/create-catalogue-type.dto';
 import { CreateCatalogueValueDto } from './dto/create-catalogue-value.dto';
@@ -30,6 +39,15 @@ export class CatalogueController {
   @Get('values/type/:code')
   findValuesByType(@Param('code') code: string) {
     return this.catalogueService.findValuesByType(code);
+  }
+
+  @Get('values/type/:code/paginated')
+  findValuesByTypePaginated(
+    @Param('code') code: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    return this.catalogueService.findValuesByTypePaginated(code, page, limit);
   }
 
   @Post('values/:id')

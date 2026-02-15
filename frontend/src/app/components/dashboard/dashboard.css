@@ -121,11 +121,15 @@
   color: #111827;
 }
 
+/* Charts centered with padding */
+/* Charts centered with padding */
 .chart-placeholder {
-  height: 200px;
+  height: 320px; /* Slightly taller for legend */
+  width: 100%;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  align-items: center; /* Center Vertically */
+  justify-content: center; /* Center Horizontally */
+  padding: 10px;
 }
 
 /* CSS Bar Chart */
