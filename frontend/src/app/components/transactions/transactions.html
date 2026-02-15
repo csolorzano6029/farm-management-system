@@ -111,19 +111,21 @@
 
     <ng-template pTemplate="footer">
       <button
+        type="button"
         pButton
         pRipple
         label="Cancelar"
         icon="pi pi-times"
-        class="p-button-text"
+        class="p-button-danger confirm-no-btn"
         (click)="hideDialog()"
       ></button>
       <button
+        type="button"
         pButton
         pRipple
         label="Guardar"
         icon="pi pi-check"
-        class="p-button-text"
+        class="p-button-success confirm-yes-btn"
         (click)="saveTransaction()"
         [loading]="loading()"
       ></button>
@@ -155,6 +157,7 @@
               <th>Tipo</th>
               <th>Categoría</th>
               <th>Concepto/Notas</th>
+              <th>Cantidad</th>
               <th>Monto</th>
               <th>Acciones</th>
             </tr>
@@ -184,6 +187,7 @@
                 <td class="notes-cell" title="{{ t.notes }}">
                   {{ t.notes || '-' }}
                 </td>
+                <td class="amount-cell">{{ t.quantity }}</td>
                 <td class="amount-cell">{{ t.totalAmount | currency }}</td>
                 <td class="actions-cell">
                   <button class="icon-btn" title="Editar" (click)="editTransaction(t)">

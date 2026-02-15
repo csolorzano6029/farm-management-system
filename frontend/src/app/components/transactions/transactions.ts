@@ -172,7 +172,13 @@ export class Transactions implements OnInit {
     this.confirmationService.confirm({
       message: '¿Estás seguro de que deseas eliminar esta transacción?',
       header: 'Confirmar Eliminación',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'pi pi-exclamation-circle', // Changed icon
+      acceptIcon: 'pi pi-check',
+      rejectIcon: 'pi pi-times',
+      acceptLabel: 'Sí, Eliminar',
+      rejectLabel: 'No, Cancelar',
+      acceptButtonStyleClass: 'p-button-success confirm-yes-btn', // Green
+      rejectButtonStyleClass: 'p-button-danger confirm-no-btn', // Red
       accept: () => {
         this.loading.set(true);
         this.transactionService.delete(transaction.id).subscribe({
