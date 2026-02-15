@@ -2,9 +2,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
   CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
+import { Transaction } from '../../transactions/entities/transaction.entity';
 
 @Entity('workers')
 export class Worker {
@@ -17,12 +18,15 @@ export class Worker {
   @Column({ name: 'last_name' })
   lastName: string;
 
+  @Column({ nullable: true })
+  role: string;
+
   @Column({ default: true })
   active: boolean;
 
+  @OneToMany(() => Transaction, (transaction) => transaction.worker)
+  transactions: Transaction[];
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 }

@@ -9,8 +9,8 @@ import {
 } from 'class-validator';
 
 export enum TransactionType {
-  INCOME = 'INCOME',
-  EXPENSE = 'EXPENSE',
+  INCOME = 'INGRESO',
+  EXPENSE = 'GASTO',
 }
 
 export class CreateTransactionDto {

@@ -183,10 +183,10 @@
                 <td>
                   <span
                     class="badge"
-                    [class.badge-income]="t.type === 'INCOME'"
-                    [class.badge-expense]="t.type === 'EXPENSE'"
+                    [class.badge-income]="t.type === 'INGRESO'"
+                    [class.badge-expense]="t.type === 'GASTO'"
                   >
-                    {{ t.type === 'INCOME' ? 'Ingreso' : 'Gasto' }}
+                    {{ t.type === 'INGRESO' ? 'Ingreso' : 'Gasto' }}
                   </span>
                 </td>
                 <td class="notes-cell">{{ t.category.name }}</td>

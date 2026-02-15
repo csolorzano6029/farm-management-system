@@ -21,7 +21,10 @@ export class CatalogueService {
   }
 
   async findAllTypes() {
-    return this.typeRepository.find({ relations: ['values'] });
+    return this.typeRepository.find({
+      relations: ['values'],
+      where: { active: true },
+    });
   }
 
   async createValue(createDto: CreateCatalogueValueDto) {
@@ -30,16 +33,21 @@ export class CatalogueService {
   }
 
   async findAllValues() {
-    return this.valueRepository.find({ relations: ['type'] });
+    return this.valueRepository.find({
+      relations: ['type'],
+      where: { active: true },
+    });
   }
 
   async findValuesByType(code: string) {
-    const type = await this.typeRepository.findOne({ where: { code } });
+    const type = await this.typeRepository.findOne({
+      where: { code, active: true },
+    });
     if (!type) {
       throw new Error(`CatalogueType with code ${code} not found`);
     }
     return this.valueRepository.find({
-      where: { type: { id: type.id } },
+      where: { type: { id: type.id }, active: true },
     });
   }
 
@@ -49,7 +57,7 @@ export class CatalogueService {
   }
 
   async removeValue(id: string) {
-    await this.valueRepository.delete(id);
+    await this.valueRepository.update(id, { active: false });
     return { deleted: true };
   }
 }

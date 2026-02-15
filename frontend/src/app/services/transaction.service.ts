@@ -20,6 +20,14 @@ export class TransactionService {
     return this.http.post<Transaction>(this.baseUrl, data);
   }
 
+  update(id: string, data: CreateTransactionDto): Observable<Transaction> {
+    return this.http.patch<Transaction>(`${this.baseUrl}/${id}`, data);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
   findAll(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(this.baseUrl);
   }

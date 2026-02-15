@@ -22,6 +22,9 @@ export class CatalogueType {
   @Column({ nullable: true })
   description: string;
 
+  @Column({ default: true })
+  active: boolean;
+
   @OneToMany(() => CatalogueValue, (value) => value.type)
   values: CatalogueValue[];
 

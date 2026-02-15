@@ -1,6 +1,6 @@
 import { CatalogueValue } from './catalogue.model';
 
-export type TransactionType = 'INCOME' | 'EXPENSE';
+export type TransactionType = 'INGRESO' | 'GASTO';
 
 export interface Transaction {
   id: string;

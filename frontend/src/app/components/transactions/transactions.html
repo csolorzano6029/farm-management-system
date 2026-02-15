@@ -1,16 +1,134 @@
 <div class="page-container">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
   <div class="page-header">
     <div class="header-content">
       <h1>Transacciones</h1>
       <p class="subtitle">Gestiona los ingresos y gastos de la finca</p>
     </div>
     <div class="header-actions">
-      <button class="btn btn-primary">
+      <button class="btn btn-outline" (click)="loadTransactions()">
+        <span class="material-symbols-rounded">refresh</span>
+        Actualizar
+      </button>
+      <button class="btn btn-primary" (click)="openNew()">
         <span class="material-symbols-rounded">add</span>
         Nueva Transacción
       </button>
     </div>
   </div>
+
+  <p-dialog
+    [(visible)]="transactionDialog"
+    [style]="{ width: '550px' }"
+    [header]="isEditMode() ? 'Editar Transacción' : 'Nueva Transacción'"
+    [modal]="true"
+    styleClass="p-fluid"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <ng-template pTemplate="content">
+      <form [formGroup]="transactionForm" class="transaction-form">
+        <!-- Tipo de Transacción -->
+        <div class="field">
+          <label for="type" class="block font-bold mb-2">Tipo</label>
+          <p-selectButton
+            inputId="type"
+            [options]="transactionTypes"
+            formControlName="type"
+            optionLabel="label"
+            optionValue="value"
+            [unselectable]="false"
+            [style]="{ width: '100%' }"
+          >
+          </p-selectButton>
+        </div>
+
+        <!-- Fecha -->
+        <div class="field">
+          <label for="date" class="block font-bold mb-2">Fecha</label>
+          <p-datepicker
+            id="date"
+            formControlName="date"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            appendTo="body"
+          >
+          </p-datepicker>
+        </div>
+
+        <!-- Categoría -->
+        <div class="field">
+          <label for="category" class="block font-bold mb-2">Categoría</label>
+          <p-select
+            id="category"
+            [options]="categories()"
+            formControlName="categoryId"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Seleccionar Categoría"
+            appendTo="body"
+          >
+          </p-select>
+        </div>
+
+        <!-- Quantity (Optional) -->
+        <div class="field">
+          <label for="quantity" class="block font-bold mb-2">Cantidad (Opcional)</label>
+          <p-inputNumber
+            id="quantity"
+            formControlName="quantity"
+            mode="decimal"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
+            placeholder="0"
+          >
+          </p-inputNumber>
+        </div>
+
+        <!-- Monto -->
+        <div class="field">
+          <label for="amount" class="block font-bold mb-2">Monto</label>
+          <p-inputNumber
+            id="amount"
+            formControlName="totalAmount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            placeholder="0.00"
+          >
+          </p-inputNumber>
+        </div>
+
+        <!-- Notas -->
+        <div class="field">
+          <label for="notes" class="block font-bold mb-2">Notas</label>
+          <textarea pTextarea id="notes" formControlName="notes" rows="3" class="w-full">
+          </textarea>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        pRipple
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Guardar"
+        icon="pi pi-check"
+        class="p-button-text"
+        (click)="saveTransaction()"
+        [loading]="loading()"
+      ></button>
+    </ng-template>
+  </p-dialog>
 
   @if (loading()) {
     <div class="loading-state">
@@ -53,10 +171,10 @@
                 <td>
                   <span
                     class="badge"
-                    [class.badge-income]="t.type === 'INCOME'"
-                    [class.badge-expense]="t.type === 'EXPENSE'"
+                    [class.badge-income]="t.type === 'INGRESO'"
+                    [class.badge-expense]="t.type === 'GASTO'"
                   >
-                    {{ t.type === 'INCOME' ? 'Ingreso' : 'Gasto' }}
+                    {{ t.type === 'INGRESO' ? 'Ingreso' : 'Gasto' }}
                   </span>
                 </td>
                 <td>
@@ -68,10 +186,10 @@
                 </td>
                 <td class="amount-cell">{{ t.totalAmount | currency }}</td>
                 <td class="actions-cell">
-                  <button class="icon-btn" title="Editar">
+                  <button class="icon-btn" title="Editar" (click)="editTransaction(t)">
                     <span class="material-symbols-rounded">edit</span>
                   </button>
-                  <button class="icon-btn delete" title="Eliminar">
+                  <button class="icon-btn delete" title="Eliminar" (click)="deleteTransaction(t)">
                     <span class="material-symbols-rounded">delete</span>
                   </button>
                 </td>

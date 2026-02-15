@@ -16,11 +16,13 @@ export class WorkersService {
   }
 
   findAll() {
-    return this.workerRepository.find({ where: { active: true } });
+    return this.workerRepository.find({
+      where: { active: true },
+    });
   }
 
   findOne(id: string) {
-    return this.workerRepository.findOneBy({ id });
+    return this.workerRepository.findOneBy({ id, active: true });
   }
 
   async update(

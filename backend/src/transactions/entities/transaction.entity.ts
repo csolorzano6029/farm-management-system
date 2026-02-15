@@ -19,7 +19,7 @@ export class Transaction {
   date: Date;
 
   @Column()
-  type: 'INCOME' | 'EXPENSE';
+  type: 'INGRESO' | 'GASTO';
 
   @Column({ name: 'category_id' })
   categoryId: string;
@@ -46,6 +46,9 @@ export class Transaction {
 
   @Column({ type: 'text', nullable: true })
   notes: string;
+
+  @Column({ default: true })
+  active: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
