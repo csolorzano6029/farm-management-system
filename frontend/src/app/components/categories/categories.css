@@ -69,6 +69,45 @@
   margin-bottom: 4px;
 }
 
+/* Button Styles (Matching Transactions) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #059669;
+}
+
+.btn-primary:disabled {
+  background-color: #d1fae5;
+  color: #065f46;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.btn-outline:hover {
+  background-color: #f3f4f6;
+}
+
 .types-list li:hover {
   background-color: #f3f4f6;
 }
@@ -176,122 +215,113 @@
   background-color: #fee2e2;
 }
 
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+
+/* Row Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modern-table tbody tr {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Form Styles */
+.field {
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.field label {
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Dialog Styles (Matching Transactions) */
+:host ::ng-deep .p-dialog .p-dialog-content {
+  background-color: #ffffff;
+  color: #374151;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header-close,
+:host ::ng-deep .p-dialog .p-dialog-header-icon {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  color: #6b7280;
+  background: transparent !important;
+  border-radius: 50% !important;
+  transition: all 0.2s;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  z-index: 50;
-}
-
-.modal-card {
-  background: white;
-  border-radius: 16px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.modal-header {
-  padding: 20px 24px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
   margin: 0;
+  padding: 0;
+  border: none !important; 
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header-close:hover,
+:host ::ng-deep .p-dialog .p-dialog-header-icon:hover {
+  background-color: rgba(107, 114, 128, 0.1) !important;
+  color: #374151 !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-title {
+  font-weight: 700;
   font-size: 1.25rem;
+}
+
+/* Dialog Button Styles (Matching Transactions) */
+:host ::ng-deep .p-dialog .p-dialog-footer button {
+  width: 140px;
+  justify-content: center;
+}
+
+:host ::ng-deep .confirm-yes-btn {
+  background-color: #10b981 !important;
+  border: 1px solid #10b981 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
   font-weight: 600;
 }
 
-.close-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #9ca3af;
+:host ::ng-deep .confirm-yes-btn:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
 }
 
-.modal-body {
-  padding: 24px;
+:host ::ng-deep .confirm-no-btn {
+  background-color: #ef4444 !important;
+  border: 1px solid #ef4444 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 600;
 }
 
-.form-group {
-  margin-bottom: 16px;
+:host ::ng-deep .confirm-no-btn:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
 }
 
-.form-group label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 6px;
-}
-
-.form-group input, .form-group textarea {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 0.95rem;
-}
-
-.form-group input:focus, .form-group textarea:focus {
-  outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
-}
-
-.modal-footer {
-  padding: 20px 24px;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-/* Buttons */
-.btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-primary {
-  background-color: #10b981;
-  color: white;
-}
-
-.btn-outline {
-  background-color: white;
-  border: 1px solid #d1d5db;
-  color: #374151;
-}
-
-.spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #10b981;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 12px;
-}
-
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+/* Cleanup: Remove old modal styles */
+/* Modal styles removed as we now use PrimeNG p-dialog */
 
 @media (max-width: 768px) {
   .layout-grid {

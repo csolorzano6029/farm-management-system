@@ -1,13 +1,27 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CatalogueService } from '../../services/catalogue.service';
 import { CatalogueType, CatalogueValue } from '../../models/catalogue.model';
+import { CatalogueService } from '../../services/catalogue.service';
+
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { RippleModule } from 'primeng/ripple';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DialogModule,
+    ButtonModule,
+    RippleModule,
+    InputTextModule,
+    TextareaModule,
+  ],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })

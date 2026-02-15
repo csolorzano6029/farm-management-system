@@ -1,7 +1,7 @@
 <div class="page-container">
   <div class="page-header">
     <div class="header-content">
-      <h1>Categorías y Catálogos</h1>
+      <h1>Categorías</h1>
       <p class="subtitle">Gestiona las listas desplegables y clasificaciones del sistema</p>
     </div>
   </div>
@@ -15,7 +15,7 @@
   <div class="layout-grid">
     <!-- Left Sidebar: Types List -->
     <div class="types-sidebar">
-      <h3>Tipos de Catálogo</h3>
+      <h3>Tipos de Categorías</h3>
       @if (loadingTypes()) {
         <div class="spinner-sm"></div>
       }
@@ -35,7 +35,7 @@
         <h2>{{ selectedType()?.name || 'Selecciona un catálogo' }}</h2>
         <button class="btn btn-primary" (click)="openCreateModal()" [disabled]="!selectedType()">
           <span class="material-symbols-rounded">add</span>
-          Nuevo Elemento
+          Nueva Categoría
         </button>
       </div>
 
@@ -89,56 +89,78 @@
   </div>
 </div>
 
-<!-- Simple Modal -->
-@if (showModal()) {
-  <div class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>{{ editingValue() ? 'Editar' : 'Nuevo' }} Elemento</h3>
-        <button class="close-btn" (click)="closeModal()">
-          <span class="material-symbols-rounded">close</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Código (Identificador único)</label>
-          <input
-            type="text"
-            [ngModel]="formCode()"
-            (ngModelChange)="formCode.set($event)"
-            placeholder="EJ: FERTILIZANTE"
-          />
-        </div>
-        <div class="form-group">
-          <label>Nombre (Visible)</label>
-          <input
-            type="text"
-            [ngModel]="formName()"
-            (ngModelChange)="formName.set($event)"
-            placeholder="Ej: Fertilizantes Orgánicos"
-          />
-        </div>
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea
-            [ngModel]="formDesc()"
-            (ngModelChange)="formDesc.set($event)"
-            rows="3"
-          ></textarea>
-        </div>
-        <div class="form-group">
-          <label>Valor Numérico (Opcional)</label>
-          <input
-            type="number"
-            [ngModel]="formNumeric()"
-            (ngModelChange)="formNumeric.set($event)"
-          />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" (click)="closeModal()">Cancelar</button>
-        <button class="btn btn-primary" (click)="saveValue()">Guardar</button>
-      </div>
-    </div>
+<!-- PrimeNG Dialog -->
+<p-dialog
+  [(visible)]="showModal"
+  [style]="{ width: '500px' }"
+  [header]="editingValue() ? 'Editar Categoría' : 'Nueva Categoría'"
+  [modal]="true"
+  styleClass="p-fluid"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="resetForm()"
+>
+  <div class="field">
+    <label>Código (Identificador único)</label>
+    <input
+      pInputText
+      type="text"
+      [ngModel]="formCode()"
+      (ngModelChange)="formCode.set($event)"
+      placeholder="EJ: FERTILIZANTE"
+      [disabled]="!!editingValue()"
+    />
   </div>
-}
+
+  <div class="field">
+    <label>Nombre (Visible)</label>
+    <input
+      pInputText
+      type="text"
+      [ngModel]="formName()"
+      (ngModelChange)="formName.set($event)"
+      placeholder="Ej: Fertilizantes Orgánicos"
+    />
+  </div>
+
+  <div class="field">
+    <label>Descripción</label>
+    <textarea
+      pInputTextarea
+      [ngModel]="formDesc()"
+      (ngModelChange)="formDesc.set($event)"
+      rows="3"
+    ></textarea>
+  </div>
+
+  <div class="field">
+    <label>Valor Numérico (Opcional)</label>
+    <input
+      pInputText
+      type="number"
+      [ngModel]="formNumeric()"
+      (ngModelChange)="formNumeric.set($event)"
+    />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Cancelar"
+      icon="pi pi-times"
+      class="confirm-no-btn"
+      (click)="closeModal()"
+    ></button>
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Guardar"
+      icon="pi pi-check"
+      class="confirm-yes-btn"
+      (click)="saveValue()"
+    ></button>
+  </ng-template>
+</p-dialog>
