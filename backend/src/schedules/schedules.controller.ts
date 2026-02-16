@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 
@@ -17,5 +25,10 @@ export class SchedulesController {
     const y = year ? Number.parseInt(year, 10) : new Date().getFullYear();
     const m = month ? Number.parseInt(month, 10) : new Date().getMonth() + 1;
     return this.schedulesService.findAllByMonth(y, m);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.schedulesService.remove(id);
   }
 }

@@ -49,4 +49,8 @@ export class SchedulesService {
       },
     });
   }
+
+  async remove(id: string): Promise<void> {
+    await this.schedulesRepository.delete(id);
+  }
 }

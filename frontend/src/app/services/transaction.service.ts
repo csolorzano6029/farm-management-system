@@ -41,4 +41,8 @@ export class TransactionService {
   getStats(): Observable<DashboardStats> {
     return this.http.get<DashboardStats>(`${this.baseUrl}/stats`);
   }
+
+  getChartData(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/chart-data`);
+  }
 }

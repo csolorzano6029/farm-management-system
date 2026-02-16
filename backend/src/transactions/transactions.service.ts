@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { TransactionDto } from './dto/transaction.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -118,5 +119,68 @@ export class TransactionsService {
       balance: income - expense,
       recentTransactions,
     };
+  }
+
+  async getChartData() {
+    try {
+      // Get aggregated data for the last 6 months
+      // Group by Month (YYYY-MM) and Type (INGRESO/GASTO)
+      const rawData: TransactionDto[] = await this.transactionRepository
+        .createQueryBuilder('transaction')
+        .select("TO_CHAR(transaction.date, 'YYYY-MM')", 'month')
+        .addSelect('transaction.type', 'type')
+        .addSelect('SUM(transaction.totalAmount)', 'total')
+        .where('transaction.active = :active', { active: true })
+        // Filter for last 6 months if needed, for now getting all to show data
+        .groupBy("TO_CHAR(transaction.date, 'YYYY-MM')")
+        .addGroupBy('transaction.type')
+        .orderBy('month', 'ASC')
+        .getRawMany();
+
+      // Process data for Chart.js
+      // We need unique months as labels
+      const months = [...new Set(rawData.map((item) => item.month))];
+      const incomeData: number[] = [];
+      const expenseData: number[] = [];
+
+      months.forEach((month) => {
+        const income = rawData.find(
+          (item) => item.month === month && item.type === 'INGRESO',
+        );
+        const expense = rawData.find(
+          (item) => item.month === month && item.type === 'GASTO',
+        );
+
+        incomeData.push(income ? Number(income.total) : 0);
+        expenseData.push(expense ? Number(expense.total) : 0);
+      });
+
+      // Format months to Spanish names (e.g., "2024-02" -> "Febrero")
+      const monthNames = months.map((m) => {
+        // Handle potential null or invalid dates
+        if (!m) return '';
+        const [year, month] = m.split('-');
+        const date = new Date(
+          Number.parseInt(year),
+          Number.parseInt(month) - 1,
+          1,
+        );
+        return date.toLocaleDateString('es-ES', { month: 'long' }); // e.g., "febrero"
+      });
+
+      // Capitalize first letter
+      const capitalizedMonthNames = monthNames.map((m) =>
+        m ? m.charAt(0).toUpperCase() + m.slice(1) : '',
+      );
+
+      return {
+        labels: capitalizedMonthNames,
+        income: incomeData,
+        expense: expenseData,
+      };
+    } catch (error) {
+      console.error('Error fetching chart data:', error);
+      throw error;
+    }
   }
 }

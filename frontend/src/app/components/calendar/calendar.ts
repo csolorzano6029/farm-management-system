@@ -1,12 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ScheduleService } from '../../services/schedule.service';
-import { CalendarDay, ScheduleModel, WorkerShift } from '../../models/schedule.model';
+import { WorkerService } from '../../services/worker.service';
+import {
+  CalendarDay,
+  ScheduleModel,
+  WorkerShift,
+  CreateScheduleDto,
+} from '../../models/schedule.model';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './calendar.html',
   styleUrls: ['./calendar.css'],
 })
@@ -16,11 +23,39 @@ export class CalendarComponent implements OnInit {
   calendarDays: CalendarDay[] = [];
   currentDate: Date = new Date();
 
-  constructor(private readonly scheduleService: ScheduleService) {}
+  isEditMode: boolean = false;
+
+  // Modal State
+  showModal: boolean = false;
+  selectedDate: string = ''; // YYYY-MM-DD
+  workers: any[] = []; // Should use WorkerModel but using any for brevity in this step
+
+  // Form Data
+  selectedWorkerId: string = '';
+  hoursInput: number = 8;
+  isExtraInput: boolean = false;
+
+  constructor(
+    private readonly scheduleService: ScheduleService,
+    private readonly workerService: WorkerService, // Inject WorkerService
+  ) {}
 
   ngOnInit(): void {
     this.loadCalendarData();
+    this.loadWorkers();
   }
+
+  loadWorkers() {
+    this.workerService.findAll().subscribe((workers) => {
+      this.workers = workers.filter((w) => w.active); // Only active workers
+    });
+  }
+
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
+  }
+
+  // ... prev/next month methods ...
 
   prevMonth() {
     this.currentDate.setMonth(this.currentDate.getMonth() - 1);
@@ -30,6 +65,59 @@ export class CalendarComponent implements OnInit {
   nextMonth() {
     this.currentDate.setMonth(this.currentDate.getMonth() + 1);
     this.loadCalendarData();
+  }
+
+  // Shift Management
+
+  deleteShift(shiftId: string, event: Event) {
+    event.stopPropagation(); // Prevent opening modal
+    if (!confirm('¿Eliminar este turno?')) return;
+
+    this.scheduleService.delete(shiftId).subscribe({
+      next: () => {
+        this.loadCalendarData(); // Refresh
+      },
+      error: (err) => console.error('Error deleting shift', err),
+    });
+  }
+
+  openAddModal(day: CalendarDay) {
+    if (!this.isEditMode) return;
+
+    // Format date for the form
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth() + 1;
+    this.selectedDate = `${year}-${String(month).padStart(2, '0')}-${String(day.date).padStart(2, '0')}`;
+
+    // Reset form
+    this.selectedWorkerId = '';
+    this.hoursInput = 8;
+    this.isExtraInput = false;
+
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  saveShift() {
+    if (!this.selectedWorkerId || !this.selectedDate) return;
+
+    const dto: CreateScheduleDto = {
+      date: this.selectedDate,
+      hours: this.hoursInput,
+      isExtra: this.isExtraInput,
+      workerId: this.selectedWorkerId,
+    };
+
+    this.scheduleService.create(dto).subscribe({
+      next: () => {
+        this.closeModal();
+        this.loadCalendarData();
+      },
+      error: (err) => console.error('Error creating shift', err),
+    });
   }
 
   loadCalendarData() {
@@ -91,6 +179,7 @@ export class CalendarComponent implements OnInit {
       const daySchedules = schedules.filter((s) => s.date === currentDayStr);
 
       const shifts: WorkerShift[] = daySchedules.map((s) => ({
+        id: s.id, // Add ID for deletion
         name: s.worker ? `${s.worker.firstName} ${s.worker.lastName}` : 'Unknown',
         hours: s.hours,
         role: s.worker?.role || 'N/A',

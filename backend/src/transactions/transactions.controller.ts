@@ -51,4 +51,9 @@ export class TransactionsController {
   getStats() {
     return this.transactionsService.getDashboardStats();
   }
+
+  @Get('chart-data')
+  getChartData() {
+    return this.transactionsService.getChartData();
+  }
 }

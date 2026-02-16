@@ -100,9 +100,9 @@
                     {{ w.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}
                   </div>
                 </td>
-                <td>{{ w.firstName.toUpperCase() }}</td>
-                <td>{{ w.lastName.toUpperCase() }}</td>
-                <td>{{ w.role?.toUpperCase() || 'N/A' }}</td>
+                <td>{{ w.firstName }}</td>
+                <td>{{ w.lastName }}</td>
+                <td>{{ w.role || 'N/A' }}</td>
                 <td>
                   <span
                     class="badge"

@@ -20,6 +20,7 @@ export interface CreateScheduleDto {
 
 // UI Models
 export interface WorkerShift {
+  id?: string; // Add ID for deletion
   name: string;
   hours: number;
   role: string;

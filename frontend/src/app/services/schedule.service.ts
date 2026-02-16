@@ -18,4 +18,8 @@ export class ScheduleService {
   create(schedule: CreateScheduleDto): Observable<ScheduleModel> {
     return this.http.post<ScheduleModel>(this.baseUrl, schedule);
   }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }
