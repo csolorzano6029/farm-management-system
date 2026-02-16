@@ -86,6 +86,8 @@
               [rowsPerPageOptions]="[5, 10, 20, 50]"
               (onPageChange)="onPageChange($event)"
               styleClass="custom-paginator"
+              currentPageReportTemplate="Mostrando {last} de {totalRecords}"
+              [showCurrentPageReport]="true"
               [dropdownAppendTo]="'self'"
             ></p-paginator>
           } @else {
@@ -175,4 +177,8 @@
   </ng-template>
 </p-dialog>
 
-<p-confirmDialog [style]="{ width: '450px' }" styleClass="custom-confirm-dialog"></p-confirmDialog>
+<p-confirmDialog
+  [style]="{ width: '450px' }"
+  styleClass="custom-confirm-dialog"
+  [draggable]="false"
+></p-confirmDialog>

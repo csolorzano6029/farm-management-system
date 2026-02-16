@@ -1,0 +1,156 @@
+<div class="page-container">
+  <p-toast></p-toast>
+  <p-confirmDialog [draggable]="false"></p-confirmDialog>
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Trabajadores</h1>
+      <p class="subtitle">Gestiona los trabajadores de la finca</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="openNew()">
+        <span class="material-symbols-rounded">add</span>
+        Nuevo Trabajador
+      </button>
+    </div>
+  </div>
+
+  <p-dialog
+    [(visible)]="workerDialog"
+    [style]="{ width: '450px' }"
+    [header]="'Nuevo Trabajador'"
+    [modal]="true"
+    styleClass="p-fluid"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <ng-template pTemplate="content">
+      <form [formGroup]="workerForm" class="transaction-form">
+        <div class="field">
+          <label for="firstName">Nombres</label>
+          <input
+            type="text"
+            pInputText
+            id="firstName"
+            formControlName="firstName"
+            placeholder="Nombre"
+          />
+        </div>
+        <div class="field">
+          <label for="lastName">Apellidos</label>
+          <input
+            type="text"
+            pInputText
+            id="lastName"
+            formControlName="lastName"
+            placeholder="Apellido"
+          />
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Cancelar"
+        icon="pi pi-times"
+        class="confirm-no-btn"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Guardar"
+        icon="pi pi-check"
+        class="confirm-yes-btn"
+        (click)="saveWorker()"
+      ></button>
+    </ng-template>
+  </p-dialog>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando trabajadores...</p>
+    </div>
+  }
+
+  @if (!loading()) {
+    <div class="content-card">
+      @if (workers().length > 0) {
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (w of workers(); track w.id) {
+              <tr>
+                <td>
+                  <div class="date-cell">
+                    <span class="material-symbols-rounded icon">calendar_today</span>
+                    {{ w.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+                  </div>
+                </td>
+                <td>{{ w.firstName.toUpperCase() }}</td>
+                <td>{{ w.lastName.toUpperCase() }}</td>
+                <td>{{ w.role?.toUpperCase() || 'N/A' }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.badge-income]="w.active"
+                    [class.badge-expense]="!w.active"
+                  >
+                    {{ w.active ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  <button class="icon-btn" title="Editar" (click)="editWorker(w)">
+                    <span class="material-symbols-rounded">edit</span>
+                  </button>
+                  <button
+                    class="icon-btn"
+                    [class.delete]="w.active"
+                    [class.activate]="!w.active"
+                    [title]="w.active ? 'Inactivar' : 'Activar'"
+                    (click)="toggleStatus(w)"
+                  >
+                    <span class="material-symbols-rounded">{{
+                      w.active ? 'do_not_disturb_on' : 'check_circle'
+                    }}</span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]="(page() - 1) * rows()"
+          [rows]="rows()"
+          [totalRecords]="totalRecords()"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {last} de {totalRecords}"
+          styleClass="custom-paginator"
+        >
+        </p-paginator>
+      } @else {
+        <div class="no-data">
+          <span class="material-symbols-rounded">group_off</span>
+          <p>No hay trabajadores registrados.</p>
+          <button class="btn btn-primary" (click)="openNew()">Crear primer trabajador</button>
+        </div>
+      }
+    </div>
+  }
+</div>

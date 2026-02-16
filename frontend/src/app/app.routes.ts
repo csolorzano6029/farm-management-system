@@ -13,5 +13,13 @@ export const routes: Routes = [
     path: 'categorias',
     loadComponent: () => import('./components/categories/categories').then((m) => m.Categories),
   },
+  {
+    path: 'trabajadores',
+    loadComponent: () => import('./components/workers/workers').then((m) => m.Workers),
+  },
+  {
+    path: 'calendario',
+    loadComponent: () => import('./components/calendar/calendar').then((m) => m.CalendarComponent),
+  },
   { path: '**', redirectTo: 'dashboard' },
 ];

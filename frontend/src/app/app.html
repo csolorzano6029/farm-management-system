@@ -39,10 +39,18 @@
           </a>
         </li>
         <li>
-          <a routerLink="/usuarios" routerLinkActive="active">
+          <a routerLink="/trabajadores" routerLinkActive="active">
             <span class="material-symbols-rounded">group</span>
             @if (!isSidebarCollapsed()) {
-              <span>Usuarios</span>
+              <span>Trabajadores</span>
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/calendario" routerLinkActive="active">
+            <span class="material-symbols-rounded">calendar_month</span>
+            @if (!isSidebarCollapsed()) {
+              <span>Calendario</span>
             }
           </a>
         </li>

@@ -21,6 +21,15 @@ export class WorkersService {
     });
   }
 
+  async findAllPaged(page: number, limit: number) {
+    const [data, total] = await this.workerRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { firstName: 'ASC' },
+    });
+    return { data, total };
+  }
+
   findOne(id: string) {
     return this.workerRepository.findOneBy({ id, active: true });
   }

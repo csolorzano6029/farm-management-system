@@ -1,0 +1,40 @@
+<div class="calendar-container">
+  <header class="calendar-header">
+    <h2>{{ currentMonthStr }}</h2>
+    <div class="calendar-controls">
+      <button class="icon-btn" (click)="prevMonth()">
+        <span class="material-symbols-rounded">chevron_left</span>
+      </button>
+      <button class="icon-btn" (click)="nextMonth()">
+        <span class="material-symbols-rounded">chevron_right</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="calendar-grid">
+    <!-- Weekday Headers -->
+    <div class="weekday-header" *ngFor="let day of weekDays">{{ day }}</div>
+
+    <!-- Calendar Days -->
+    <div
+      class="calendar-day"
+      *ngFor="let day of calendarDays"
+      [class.other-month]="!day.isCurrentMonth"
+      [class.current-month]="day.isCurrentMonth"
+    >
+      <div class="day-number">{{ day.date }}</div>
+
+      <div class="shifts-list">
+        <div
+          class="shift-item"
+          *ngFor="let shift of day.shifts"
+          [class.extra-shift]="shift.extra"
+          [title]="shift.name + ' - ' + ' (' + shift.hours + 'h)'"
+        >
+          <div class="worker-name">{{ shift.name }}</div>
+          <div class="hours-badge">{{ shift.hours }}h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

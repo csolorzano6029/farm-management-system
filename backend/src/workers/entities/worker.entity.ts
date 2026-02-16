@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Transaction } from '../../transactions/entities/transaction.entity';
+import { Schedule } from '../../schedules/entities/schedule.entity';
 
 @Entity('workers')
 export class Worker {
@@ -26,6 +27,9 @@ export class Worker {
 
   @OneToMany(() => Transaction, (transaction) => transaction.worker)
   transactions: Transaction[];
+
+  @OneToMany(() => Schedule, (schedule) => schedule.worker)
+  schedules: Schedule[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

@@ -1,8 +1,9 @@
-export interface Worker {
+export interface WorkerModel {
   id: string;
   firstName: string;
   lastName: string;
   active: boolean;
+  role?: string;
   createdAt?: string;
   updatedAt?: string;
 }

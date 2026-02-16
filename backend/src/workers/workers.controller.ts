@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { WorkersService } from './workers.service';
 
@@ -21,6 +22,11 @@ export class WorkersController {
   @Get()
   findAll() {
     return this.workersService.findAll();
+  }
+
+  @Get('paginated')
+  findAllPaged(@Query('page') page = 1, @Query('limit') limit = 10) {
+    return this.workersService.findAllPaged(Number(page), Number(limit));
   }
 
   @Get(':id')
