@@ -56,4 +56,9 @@ export class TransactionsController {
   getChartData() {
     return this.transactionsService.getChartData();
   }
+
+  @Get('production-data')
+  getProductionData() {
+    return this.transactionsService.getProductionData();
+  }
 }

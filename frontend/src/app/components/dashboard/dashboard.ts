@@ -20,6 +20,7 @@ export class Dashboard implements OnInit, OnDestroy {
   stats: DashboardStats | null = null;
   loading = true;
   error: string | null = null;
+  currentDate = new Date();
   private statsSubscription?: Subscription;
 
   data: any;
@@ -151,6 +152,26 @@ export class Dashboard implements OnInit, OnDestroy {
         };
       },
       error: (err) => console.error('Error loading chart data', err),
+    });
+
+    this.transactionService.getProductionData().subscribe({
+      next: (data) => {
+        // Apply point styles to the datasets received from backend
+        const datasets = data.datasets.map((dataset: any) => ({
+          ...dataset,
+          pointBackgroundColor: dataset.borderColor,
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+        }));
+
+        this.cropProductionChartData = {
+          labels: data.labels,
+          datasets: datasets,
+        };
+      },
+      error: (err) => console.error('Error loading production data', err),
     });
   }
 

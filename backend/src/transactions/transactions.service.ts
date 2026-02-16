@@ -132,6 +132,7 @@ export class TransactionsService {
         .addSelect('SUM(transaction.totalAmount)', 'total')
         .where('transaction.active = :active', { active: true })
         // Filter for last 6 months if needed, for now getting all to show data
+        .andWhere("TO_CHAR(transaction.date, 'YYYY') = TO_CHAR(NOW(), 'YYYY')")
         .groupBy("TO_CHAR(transaction.date, 'YYYY-MM')")
         .addGroupBy('transaction.type')
         .orderBy('month', 'ASC')
@@ -180,6 +181,86 @@ export class TransactionsService {
       };
     } catch (error) {
       console.error('Error fetching chart data:', error);
+      throw error;
+    }
+  }
+
+  async getProductionData() {
+    try {
+      // Get aggregated production data (quantity) for INGRESO transactions
+      // Group by Month (YYYY-MM) and Category Name
+      const rawData: TransactionDto[] = await this.transactionRepository
+        .createQueryBuilder('transaction')
+        .leftJoinAndSelect('transaction.category', 'category')
+        .select("TO_CHAR(transaction.date, 'YYYY-MM')", 'month')
+        .addSelect('category.name', 'categoryName')
+        .addSelect('SUM(transaction.quantity)', 'totalQuantity')
+        .where('transaction.type = :type', { type: 'INGRESO' })
+        .andWhere('transaction.active = :active', { active: true })
+        // simple way to filter for crops: we can assume categories with 'Limon' or 'Cacao'
+        // or just return all income categories that have quantity
+        .andWhere('transaction.quantity > 0')
+        .andWhere("TO_CHAR(transaction.date, 'YYYY') = TO_CHAR(NOW(), 'YYYY')")
+        .groupBy("TO_CHAR(transaction.date, 'YYYY-MM')")
+        .addGroupBy('category.name')
+        .orderBy('month', 'ASC')
+        .getRawMany();
+
+      // Process data for Chart.js
+      const months = [...new Set(rawData.map((item) => item.month))];
+      const categories = [...new Set(rawData.map((item) => item.categoryName))];
+
+      const datasets = categories.map((category) => {
+        const data = months.map((month) => {
+          const record = rawData.find(
+            (item) => item.month === month && item.categoryName === category,
+          );
+          return record ? Number(record.totalQuantity) : 0;
+        });
+
+        // Assign colors based on crop (simple mapping)
+        let color = '#3b82f6'; // Default Blue
+        if (
+          category.toLowerCase().includes('limon') ||
+          category.toLowerCase().includes('limón')
+        ) {
+          color = '#10b981'; // Green for Limon
+        } else if (category.toLowerCase().includes('cacao')) {
+          color = '#f59e0b'; // Amber/Brown for Cacao
+        }
+
+        return {
+          label: category,
+          data: data,
+          fill: true,
+          borderColor: color,
+          backgroundColor: color + '1a', // 10% opacity
+          tension: 0.4,
+        };
+      });
+
+      // Format months
+      const monthNames = months.map((m) => {
+        if (!m) return '';
+        const [year, month] = m.split('-');
+        const date = new Date(
+          Number.parseInt(year),
+          Number.parseInt(month) - 1,
+          1,
+        );
+        return date.toLocaleDateString('es-ES', { month: 'long' });
+      });
+
+      const capitalizedMonthNames = monthNames.map((m) =>
+        m ? m.charAt(0).toUpperCase() + m.slice(1) : '',
+      );
+
+      return {
+        labels: capitalizedMonthNames,
+        datasets: datasets,
+      };
+    } catch (error) {
+      console.error('Error fetching production data:', error);
       throw error;
     }
   }

@@ -45,4 +45,8 @@ export class TransactionService {
   getChartData(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/chart-data`);
   }
+
+  getProductionData(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/production-data`);
+  }
 }

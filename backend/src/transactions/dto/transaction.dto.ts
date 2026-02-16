@@ -7,6 +7,12 @@ export class TransactionDto {
   @IsString()
   type: string;
 
+  @IsString()
+  categoryName: string;
+
   @IsNumber()
   total: number;
+
+  @IsNumber()
+  totalQuantity: number;
 }
