@@ -32,38 +32,16 @@ export class Dashboard implements OnInit, OnDestroy {
   cropProductionChartOptions: any;
 
   ngOnInit() {
-    this.initCharts();
+    this.initChartOptions(); // Initialize options first
     this.loadStats();
+    this.loadChartData(); // Load real data
   }
 
-  initCharts() {
+  initChartOptions() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--p-text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
     const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-
-    // Bar Chart (Ingresos vs Gastos)
-    this.incomeExpenseChartData = {
-      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
-      datasets: [
-        {
-          label: 'Ingresos',
-          backgroundColor: '#10b981', // Emerald-500
-          borderColor: '#10b981',
-          data: [65, 59, 80, 81, 56, 55],
-          barThickness: 20,
-          borderRadius: 4,
-        },
-        {
-          label: 'Gastos',
-          backgroundColor: '#ef4444', // Red-500
-          borderColor: '#ef4444',
-          data: [28, 48, 40, 19, 86, 27],
-          barThickness: 20,
-          borderRadius: 4,
-        },
-      ],
-    };
 
     this.incomeExpenseChartOptions = {
       maintainAspectRatio: false,
@@ -112,7 +90,8 @@ export class Dashboard implements OnInit, OnDestroy {
       },
     };
 
-    // Line Chart (Producción de Cultivos)
+    // Keep Crop Production Chart as is for now (hardcoded) or remove if not needed
+    this.cropProductionChartOptions = { ...this.incomeExpenseChartOptions }; // Same options for now
     this.cropProductionChartData = {
       labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
       datasets: [
@@ -121,7 +100,7 @@ export class Dashboard implements OnInit, OnDestroy {
           data: [65, 59, 80, 81, 56, 55, 40],
           fill: true,
           backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          borderColor: '#10b981', // Emerald-500
+          borderColor: '#10b981',
           tension: 0.4,
           pointBackgroundColor: '#10b981',
           pointBorderColor: '#ffffff',
@@ -134,7 +113,7 @@ export class Dashboard implements OnInit, OnDestroy {
           data: [28, 48, 40, 19, 86, 27, 90],
           fill: true,
           backgroundColor: 'rgba(245, 158, 11, 0.1)',
-          borderColor: '#f59e0b', // Amber-500
+          borderColor: '#f59e0b',
           tension: 0.4,
           pointBackgroundColor: '#f59e0b',
           pointBorderColor: '#ffffff',
@@ -144,46 +123,35 @@ export class Dashboard implements OnInit, OnDestroy {
         },
       ],
     };
+  }
 
-    this.cropProductionChartOptions = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            color: textColor,
-            usePointStyle: true,
-            padding: 20,
-          },
-        },
+  loadChartData() {
+    this.transactionService.getChartData().subscribe({
+      next: (data) => {
+        this.incomeExpenseChartData = {
+          labels: data.labels,
+          datasets: [
+            {
+              label: 'Ingresos',
+              backgroundColor: '#10b981',
+              borderColor: '#10b981',
+              data: data.income,
+              barThickness: 20,
+              borderRadius: 4,
+            },
+            {
+              label: 'Gastos',
+              backgroundColor: '#ef4444',
+              borderColor: '#ef4444',
+              data: data.expense,
+              barThickness: 20,
+              borderRadius: 4,
+            },
+          ],
+        };
       },
-      scales: {
-        x: {
-          ticks: {
-            color: textColorSecondary,
-          },
-          grid: {
-            display: false,
-            drawBorder: false,
-          },
-        },
-        y: {
-          ticks: {
-            color: textColorSecondary,
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false,
-            borderDash: [5, 5],
-          },
-        },
-      },
-      animation: {
-        duration: 1500,
-        easing: 'easeInOutQuart',
-      },
-    };
+      error: (err) => console.error('Error loading chart data', err),
+    });
   }
 
   ngOnDestroy() {
